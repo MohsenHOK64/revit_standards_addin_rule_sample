@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ListViewsInSelectedPrintSets
 {
-    public void Run(Document doc, List<ElementId> ids)
+    public IEnumerable<ElementId> Run(Document doc, List<ElementId> ids)
     {
         PrintManager pm = doc.PrintManager;
 
@@ -54,5 +54,6 @@ public class ListViewsInSelectedPrintSets
             existingVSS.Save();
             tr.Commit();
         }
+        return sheetsNotInSheetSet;
     }
 }
