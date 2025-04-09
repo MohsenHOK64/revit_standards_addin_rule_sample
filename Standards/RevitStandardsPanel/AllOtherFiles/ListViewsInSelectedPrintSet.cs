@@ -61,6 +61,6 @@ public class ListViewsInSelectedPrintSet
                 tr.Commit();
             }
         }
-        return pm.Id;
+        return newVSS.Views;
     }
 }
