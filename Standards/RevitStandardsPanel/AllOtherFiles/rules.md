@@ -3,6 +3,8 @@
 ```json
 {
   "Workset Rules":
+  [],
+  "Parameter Rules": 
   [
     {
       "Rule Name": "Check Views in Current Print Set",
@@ -10,10 +12,6 @@
       "User Message": "Added all sheets to current print set",
       "When Run": ["SyncToCentral"]
     }
-  ],
-  "Parameter Rules": 
-  [
-    
   ]
 }
 ```
