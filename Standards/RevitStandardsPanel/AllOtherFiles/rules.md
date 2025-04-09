@@ -8,7 +8,7 @@
   [
     {
       "Rule Name": "Check Views in Print Set",
-      "Custom Code": "ListViewsInSelectedPrintSets",
+      "Custom Code": "ListViewsInSelectedPrintSet",
       "User Message": "Added all sheets to current print set",
       "When Run": ["SyncToCentral"]
     }

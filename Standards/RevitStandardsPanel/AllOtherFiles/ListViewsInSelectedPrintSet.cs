@@ -2,7 +2,7 @@ using Autodesk.Revit.DB;
 using System.Linq;
 using System.Collections.Generic;
 
-public class ListViewsInSelectedPrintSets
+public class ListViewsInSelectedPrintSet
 {
     public IEnumerable<ElementId> Run(Document doc, List<ElementId> ids)
     {
