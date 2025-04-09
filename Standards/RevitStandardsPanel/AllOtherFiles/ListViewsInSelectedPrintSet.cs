@@ -47,13 +47,8 @@ public class ListViewsInSelectedPrintSet
                 continue;
             }
         }
-        using (Transaction tr = new Transaction(doc, "Add Sheets to View Sheet Set"))
-        {
-            tr.Start();
-            existingVSS.CurrentViewSheetSet.Views = newVSS;
-            existingVSS.Save();
-            tr.Commit();
-        }
+        existingVSS.CurrentViewSheetSet.Views = newVSS;
+        existingVSS.Save();
         return sheetsNotInSheetSet;
     }
 }
