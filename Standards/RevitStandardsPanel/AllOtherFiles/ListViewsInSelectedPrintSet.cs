@@ -47,7 +47,7 @@ public class ListViewsInSelectedPrintSet
                 continue;
             }
         }
-        if (doc.IsInTransaction)
+        if (doc.IsModifiable)
         {
             existingVSS.CurrentViewSheetSet.Views = newVSS;
             existingVSS.Save();
