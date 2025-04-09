@@ -23,38 +23,37 @@ public class ListViewsInSelectedPrintSet
             .ToList();
 
         List<ElementId> sheetsNotInSheetSet = new List<ElementId>();
-
-        foreach (ElementId viewId in sheetsInDocIds)
+        using (Transaction tr = new Transaction(doc, "Add Sheets to View Sheet Set"))
         {
-            View view = (View)doc.GetElement(viewId);
-            if (!existingVSSet.Views.Contains(view))
+            foreach (ElementId viewId in sheetsInDocIds)
             {
-                sheetsNotInSheetSet.Add(viewId);
+                View view = (View)doc.GetElement(viewId);
+                if (!existingVSSet.Views.Contains(view))
+                {
+                    sheetsNotInSheetSet.Add(viewId);
+                }
             }
-        }
 
-        // Add the excluded sheets to the sheet set
-        ViewSet newVSS = new ViewSet();
-        foreach (var viewId in sheetsNotInSheetSet)
-        {
-            View currView = (View)doc.GetElement(viewId);
-            if (!newVSS.Contains(currView))
+            // Add the excluded sheets to the sheet set
+            ViewSet newVSS = new ViewSet();
+            foreach (var viewId in sheetsNotInSheetSet)
             {
-                newVSS.Insert(currView);
+                View currView = (View)doc.GetElement(viewId);
+                if (!newVSS.Contains(currView))
+                {
+                    newVSS.Insert(currView);
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            if (doc.IsModifiable)
+            {
+                existingVSS.CurrentViewSheetSet.Views = newVSS;
+                existingVSS.Save();
             }
             else
-            {
-                continue;
-            }
-        }
-        if (doc.IsModifiable)
-        {
-            existingVSS.CurrentViewSheetSet.Views = newVSS;
-            existingVSS.Save();
-        }
-        else
-        {
-            using (Transaction tr = new Transaction(doc, "Add Sheets to View Sheet Set"))
             {
                 tr.Start();
                 existingVSS.CurrentViewSheetSet.Views = newVSS;
