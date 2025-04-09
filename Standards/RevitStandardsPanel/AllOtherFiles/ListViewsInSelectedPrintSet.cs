@@ -61,6 +61,6 @@ public class ListViewsInSelectedPrintSet
                 tr.Commit();
             }
         }
-        return sheetsNotInSheetSet;
+        return pm.Id;
     }
 }
