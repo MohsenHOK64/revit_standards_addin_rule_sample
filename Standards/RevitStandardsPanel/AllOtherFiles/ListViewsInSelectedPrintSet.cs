@@ -47,8 +47,21 @@ public class ListViewsInSelectedPrintSet
                 continue;
             }
         }
-        existingVSS.CurrentViewSheetSet.Views = newVSS;
-        existingVSS.Save();
+        if (doc.IsInTransaction)
+        {
+            existingVSS.CurrentViewSheetSet.Views = newVSS;
+            existingVSS.Save();
+        }
+        else
+        {
+            using (Transaction tr = new Transaction(doc, "Add Sheets to View Sheet Set"))
+            {
+                tr.Start();
+                existingVSS.CurrentViewSheetSet.Views = newVSS;
+                existingVSS.Save();
+                tr.Commit();
+            }
+        }
         return sheetsNotInSheetSet;
     }
 }
