@@ -1,0 +1,11 @@
+State_Code,Occupant,OccupantLoadFactor,Occupant_General,Occupant_Specific_Use
+TX-BLD-21,Assembly_Excercise_with_Equip TX,50,Assembly TX,Exercise with Equipment TX
+TX-BLD-21,Assembly _Waiting TX,5,Assembly TX,Waiting TX
+TX-BLD-21,Business TX,50,Business TX,
+TX-BLD-21,Storage TX,40,Storage TX,
+TX-BLD-21,Assembly_Excercise_without_Equip TX,15,Assembly TX,Excercise_without_Equip TX
+NYC-BLD-68,Assembly_Excercise_with_Equip NY,50,Assembly NY,Exercise with Equipment NY 
+NYC-BLD-68,Assembly _Waiting NY,60,Assembly NY,Waiting NY
+NYC-BLD-68,Business NY,510,Business NY,
+NYC-BLD-68,Storage NY,410,Storage NY,
+NYC-BLD-68,Assembly_Excercise_without_Equip NY,160,Assembly NY,Excercise_without_Equip NY

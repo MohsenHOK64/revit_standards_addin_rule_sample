@@ -1,0 +1,33 @@
+{
+  "StandardsConfig": [
+    {
+      "PathToStandardsFiles": "/Standards/RevitStandardsPanel/AnnotatedTest",
+      "RvtFullPathRegex": 
+      [
+        "^.*AnnotatedTest.*\\.rvt$"
+      ]
+    },
+    {
+      "PathToStandardsFiles": "/Standards/RevitStandardsPanel/House123",
+      "RvtFullPathRegex": 
+      [
+        "House123\\.rvt$",
+        "\\\\House123\\\\"
+      ]
+    },
+    {
+      "PathToStandardsFiles": "/Standards/RevitStandardsPanel/LibraryABC",
+      "RvtFullPathRegex": 
+      [
+        "LibraryABC\\.rvt$"
+      ]
+    },
+    {
+      "PathToStandardsFiles": "/Standards/RevitStandardsPanel/AllOtherFiles",
+      "RvtFullPathRegex": 
+      [
+        ".*"
+      ]
+    }
+  ]
+}
