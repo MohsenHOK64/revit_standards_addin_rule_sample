@@ -61,6 +61,6 @@ public class ListViewsInSelectedPrintSet
                 tr.Commit();
             }
         }
-        return sheetsInDocIds;
+        return new List<ElementId>();
     }
 }
