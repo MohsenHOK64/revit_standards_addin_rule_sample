@@ -23,31 +23,32 @@ public class ListViewsInSelectedPrintSet
             .ToList();
 
         List<ElementId> sheetsNotInSheetSet = new List<ElementId>();
+
+        foreach (ElementId viewId in sheetsInDocIds)
+        {
+            View view = (View)doc.GetElement(viewId);
+            if (!existingVSSet.Views.Contains(view))
+            {
+                sheetsNotInSheetSet.Add(viewId);
+            }
+        }
+
+        // Add the excluded sheets to the sheet set
+        ViewSet newVSS = new ViewSet();
+        foreach (var viewId in sheetsNotInSheetSet)
+        {
+            View currView = (View)doc.GetElement(viewId);
+            if (!newVSS.Contains(currView))
+            {
+                newVSS.Insert(currView);
+            }
+            else
+            {
+                continue;
+            }
+        }
         using (Transaction tr = new Transaction(doc, "Add Sheets to View Sheet Set"))
         {
-            foreach (ElementId viewId in sheetsInDocIds)
-            {
-                View view = (View)doc.GetElement(viewId);
-                if (!existingVSSet.Views.Contains(view))
-                {
-                    sheetsNotInSheetSet.Add(viewId);
-                }
-            }
-
-            // Add the excluded sheets to the sheet set
-            ViewSet newVSS = new ViewSet();
-            foreach (var viewId in sheetsNotInSheetSet)
-            {
-                View currView = (View)doc.GetElement(viewId);
-                if (!newVSS.Contains(currView))
-                {
-                    newVSS.Insert(currView);
-                }
-                else
-                {
-                    continue;
-                }
-            }
             if (doc.IsModifiable)
             {
                 existingVSS.CurrentViewSheetSet.Views = newVSS;
