@@ -11,12 +11,7 @@ public class ListViewsInSelectedPrintSet
         // Ensure that the print manager setting is set to selected views
         if (pm.PrintRange != PrintRange.Select)
         {
-            using (Transaction tr = new Transaction(doc, "Set Print Range"))
-            {
-                tr.Start();
-                pm.PrintRange = PrintRange.Select;
-                tr.Commit();
-            }
+            pm.PrintRange = PrintRange.Select;
         }
 
         ViewSheetSetting existingVSS = pm.ViewSheetSetting;
