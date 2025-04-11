@@ -8,11 +8,20 @@ public class ListViewsInSelectedPrintSet
     {
         PrintManager pm = doc.PrintManager;
 
+        // Ensure that the print manager setting is set to selected views
+        if (pm.PrintRange != PrintRange.Select)
+        {
+            using (Transaction tr = new Transaction(doc, "Set Print Range"))
+            {
+                tr.Start();
+                pm.PrintRange = PrintRange.Select;
+                tr.Commit();
+            }
+        }
+
         ViewSheetSetting existingVSS = pm.ViewSheetSetting;
 
         ViewSheetSet existingVSSet = (ViewSheetSet)existingVSS.CurrentViewSheetSet;
-
-        // Add existing sheets not in the ViewSheetSet to it
 
         // Get all of the sheets in the document
         List<ElementId> sheetsInDocIds = new FilteredElementCollector(doc)
