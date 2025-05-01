@@ -26,20 +26,17 @@ public class ListViewsInSelectedPrintSet
             .Select(s => s.Id)
             .ToList();
 
-        List<ElementId> sheetsNotInSheetSet = new List<ElementId>();
+        List<ElementId> sheetsInModel = new List<ElementId>();
 
         foreach (ElementId viewId in sheetsInDocIds)
         {
             View view = (View)doc.GetElement(viewId);
-            if (!existingVSSet.Views.Contains(view))
-            {
-                sheetsNotInSheetSet.Add(viewId);
-            }
+            sheetsInModel.Add(viewId);
         }
 
         // Add the excluded sheets to the sheet set
         ViewSet newVSS = new ViewSet();
-        foreach (var viewId in sheetsNotInSheetSet)
+        foreach (var viewId in sheetsInModel)
         {
             View currView = (View)doc.GetElement(viewId);
             if (!newVSS.Contains(currView))
