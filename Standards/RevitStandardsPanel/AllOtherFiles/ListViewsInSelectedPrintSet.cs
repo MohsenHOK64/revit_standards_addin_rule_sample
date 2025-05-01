@@ -57,7 +57,7 @@ public class ListViewsInSelectedPrintSet
                     existingVSS.CurrentViewSheetSet.Views = newVSS;
                     existingVSS.Save();
                 }
-                catch (Exception ex)
+                catch
                 {
                     _ = ex.Message;
                     // View Sheet Set is unchanged, therefore do nothing and just commit it as is
@@ -71,7 +71,7 @@ public class ListViewsInSelectedPrintSet
                     existingVSS.CurrentViewSheetSet.Views = newVSS;
                     existingVSS.Save();
                 }
-                catch (Exception ex)
+                catch
                 {
                     _ = ex.Message;
                     // View Sheet Set is unchanged, therefore do nothing and just commit it as is
