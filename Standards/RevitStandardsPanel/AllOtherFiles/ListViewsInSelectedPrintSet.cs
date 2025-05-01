@@ -52,14 +52,30 @@ public class ListViewsInSelectedPrintSet
         {
             if (doc.IsModifiable)
             {
-                existingVSS.CurrentViewSheetSet.Views = newVSS;
-                existingVSS.Save();
+                try
+                {
+                    existingVSS.CurrentViewSheetSet.Views = newVSS;
+                    existingVSS.Save();
+                }
+                catch (Exception ex)
+                {
+                    _ = ex.Message;
+                    // View Sheet Set is unchanged, therefore do nothing and just commit it as is
+                }
             }
             else
             {
                 tr.Start();
-                existingVSS.CurrentViewSheetSet.Views = newVSS;
-                existingVSS.Save();
+                try
+                {
+                    existingVSS.CurrentViewSheetSet.Views = newVSS;
+                    existingVSS.Save();
+                }
+                catch (Exception ex)
+                {
+                    _ = ex.Message;
+                    // View Sheet Set is unchanged, therefore do nothing and just commit it as is
+                }
                 tr.Commit();
             }
         }
