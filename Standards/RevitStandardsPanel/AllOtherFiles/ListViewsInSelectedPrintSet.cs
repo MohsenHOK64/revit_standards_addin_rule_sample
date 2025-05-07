@@ -6,6 +6,52 @@ public class ListViewsInSelectedPrintSet
 {
     public IEnumerable<ElementId> Run(Document doc, List<ElementId> ids)
     {
+        // First ensure that the "Add ALL Sheets to HOK Print Set" parameter exists and is enabled
+        var hokPrintSetParamId = GlobalParametersManager.FindByName(
+            doc,
+            "Add ALL Sheets to HOK Print Set"
+        );
+
+        // If parameter is not found, create it
+        if (hokPrintSetParamId == ElementId.InvalidElementId)
+        {
+            // Creating the parameter
+            using (Transaction tr = new Transaction(doc, "Create HOK Print Set Parameter"))
+            {
+                tr.Start();
+                GlobalParameter hokPrintSetParam = GlobalParameter.Create(
+                    doc,
+                    "Add ALL Sheets to HOK Print Set",
+                    SpecTypeId.Boolean.YesNo
+                );
+                // Set the default value to off/false
+                hokPrintSetParam.SetValue(new IntegerParameterValue(1));
+                tr.Commit();
+                // Stop executing after creating it
+                TaskDialog.Show(
+                    "Created New Global Parameter",
+                    "Successfully created the "
+                        + hokPrintSetParam.Name
+                        + " parameter and set its value to "
+                        + (hokPrintSetParam.GetValue() as IntegerParameterValue).Value
+                );
+            }
+        }
+        hokPrintSetParamId = GlobalParametersManager.FindByName(
+            doc,
+            "Add ALL Sheets to HOK Print Set"
+        );
+        var hokPrintSetParameter = doc.GetElement(hokPrintSetParamId) as GlobalParameter;
+        if ((hokPrintSetParameter.GetValue() as IntegerParameterValue).Value == 1)
+        {
+            goto AddAllSheets;
+        }
+        else
+        {
+            return;
+        }
+
+        AddAllSheets:
         PrintManager pm = doc.PrintManager;
 
         // Ensure that the print manager setting is set to selected views
@@ -15,8 +61,17 @@ public class ListViewsInSelectedPrintSet
         }
 
         ViewSheetSetting existingVSS = pm.ViewSheetSetting;
+        // Save the previously selected viewsheet set so we can set it back to the original at the end
+        var existingViewSheetSet = existingVSS.CurrentViewSheetSet;
 
-        ViewSheetSet existingVSSet = (ViewSheetSet)existingVSS.CurrentViewSheetSet;
+        var hokSheetSet = new FilteredElementCollector(doc)
+            .OfClass(typeof(ViewSheetSet))
+            .Cast<ViewSheetSet>();
+
+        if (hokSheetSet.Select(ss => ss.Name).Contains("_HOK Automated Print Set"))
+            existingVSS.CurrentViewSheetSet = hokSheetSet.First(
+                ss => ss.Name == "_HOK Automated Print Set"
+            );
 
         // Get all of the sheets in the document
         List<ElementId> sheetsInDocIds = new FilteredElementCollector(doc)
@@ -52,31 +107,52 @@ public class ListViewsInSelectedPrintSet
         {
             if (doc.IsModifiable)
             {
-                try
+                if (
+                    hokSheetSet != null
+                    && ((ViewSheetSet)existingVSS.CurrentViewSheetSet).Name
+                        == "_HOK Automated Print Set"
+                )
+                {
+                    try
+                    {
+                        existingVSS.CurrentViewSheetSet.Views = newVSS;
+                        existingVSS.Save();
+                    }
+                    catch { }
+                }
+                else
                 {
                     existingVSS.CurrentViewSheetSet.Views = newVSS;
-                    existingVSS.Save();
+                    existingVSS.SaveAs("_HOK Automated Print Set");
                 }
-                catch
-                {
-                    // View Sheet Set is unchanged, therefore do nothing and just commit it as is
-                }
+                // existingVSS.CurrentViewSheetSet = existingViewSheetSet;
+                // existingVSS.Save();
             }
             else
             {
                 tr.Start();
-                try
+                if (
+                    hokSheetSet != null
+                    && ((ViewSheetSet)existingVSS.CurrentViewSheetSet).Name
+                        == "_HOK Automated Print Set"
+                )
+                {
+                    try
+                    {
+                        existingVSS.CurrentViewSheetSet.Views = newVSS;
+                        existingVSS.Save();
+                    }
+                    catch { }
+                }
+                else
                 {
                     existingVSS.CurrentViewSheetSet.Views = newVSS;
-                    existingVSS.Save();
+                    existingVSS.SaveAs("_HOK Automated Print Set");
                 }
-                catch
-                {
-                    // View Sheet Set is unchanged, therefore do nothing and just commit it as is
-                }
+                // existingVSS.CurrentViewSheetSet = existingViewSheetSet;
+                // existingVSS.Save();
                 tr.Commit();
             }
         }
-        return new List<ElementId>();
     }
 }
