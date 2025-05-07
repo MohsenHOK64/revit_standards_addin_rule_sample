@@ -49,7 +49,7 @@ public class ListViewsInSelectedPrintSet
         }
         else
         {
-            return;
+            return new List<ElementId>();
         }
 
         AddAllSheets:
@@ -155,5 +155,6 @@ public class ListViewsInSelectedPrintSet
                 tr.Commit();
             }
         }
+        return new List<ElementId>();
     }
 }
