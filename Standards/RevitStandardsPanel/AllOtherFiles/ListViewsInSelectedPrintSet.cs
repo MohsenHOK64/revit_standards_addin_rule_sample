@@ -41,7 +41,7 @@ public class ListViewsInSelectedPrintSet
                     hokPrintSetParam.SetValue(new IntegerParameterValue(1));
                     tr.Commit();
                 }
-                var hokPrintSetParameter = GlobalParametersManager.FindByName(
+                var hokParameter = GlobalParametersManager.FindByName(
                     doc,
                     "Add ALL Sheets to HOK Print Set"
                 );
@@ -49,9 +49,9 @@ public class ListViewsInSelectedPrintSet
                 TaskDialog.Show(
                     "Created New Global Parameter",
                     "Successfully created the "
-                        + hokPrintSetParameter.Name
+                        + hokParameter.Name
                         + " parameter and set its value to "
-                        + (hokPrintSetParameter.GetValue() as IntegerParameterValue).Value
+                        + (hokParameter.GetValue() as IntegerParameterValue).Value
                 );
             }
         }
