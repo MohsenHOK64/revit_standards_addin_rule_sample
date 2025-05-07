@@ -19,22 +19,39 @@ public class ListViewsInSelectedPrintSet
             // Creating the parameter
             using (Transaction tr = new Transaction(doc, "Create HOK Print Set Parameter"))
             {
-                tr.Start();
-                GlobalParameter hokPrintSetParam = GlobalParameter.Create(
+                if (doc.IsModifiable)
+                {
+                    GlobalParameter hokPrintSetParam = GlobalParameter.Create(
+                        doc,
+                        "Add ALL Sheets to HOK Print Set",
+                        SpecTypeId.Boolean.YesNo
+                    );
+                    // Set the default value to off/false
+                    hokPrintSetParam.SetValue(new IntegerParameterValue(1));
+                }
+                else
+                {
+                    tr.Start();
+                    GlobalParameter hokPrintSetParam = GlobalParameter.Create(
+                        doc,
+                        "Add ALL Sheets to HOK Print Set",
+                        SpecTypeId.Boolean.YesNo
+                    );
+                    // Set the default value to off/false
+                    hokPrintSetParam.SetValue(new IntegerParameterValue(1));
+                    tr.Commit();
+                }
+                var hokPrintSetParameter = GlobalParametersManager.FindByName(
                     doc,
-                    "Add ALL Sheets to HOK Print Set",
-                    SpecTypeId.Boolean.YesNo
+                    "Add ALL Sheets to HOK Print Set"
                 );
-                // Set the default value to off/false
-                hokPrintSetParam.SetValue(new IntegerParameterValue(1));
-                tr.Commit();
                 // Stop executing after creating it
                 TaskDialog.Show(
                     "Created New Global Parameter",
                     "Successfully created the "
-                        + hokPrintSetParam.Name
+                        + hokPrintSetParameter.Name
                         + " parameter and set its value to "
-                        + (hokPrintSetParam.GetValue() as IntegerParameterValue).Value
+                        + (hokPrintSetParameter.GetValue() as IntegerParameterValue).Value
                 );
             }
         }
